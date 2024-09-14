@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heartbox API Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .lightbulb {
+            width: 500px;
+            height: 500px;
+        }
+        .config-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .config-toggle {
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            color: gray;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="output">
+        <img id="lightbulb" src="unlit_bulb.png" class="lightbulb" alt="Lightbulb" />
+    </div>
+
+    <div class="config-toggle" id="configToggle">Configure Settings</div>
+
+    <div class="config-section" id="configSection">
+        <div>
+            <label>
+                <input type="radio" name="deviceId" value="0" checked>
+                Device ID 0
+            </label>
+            <label>
+                <input type="radio" name="deviceId" value="1">
+                Device ID 1
+            </label>
+        </div>
+
+        <div>
+            <!-- Remember to update your Function's CORS configuration -->
+            <input type="text" id="host" placeholder="host" />
+            <input type="password" id="secretKey" placeholder="x-functions-key" />
+            <br>
+            <button id="saveButton">Save</button>
+        </div>
+    </div>
+
+    <script>
+        const lightbulbImg = document.getElementById('lightbulb');
+        const saveButton = document.getElementById('saveButton');
+        const secretKeyInput = document.getElementById('secretKey');
+        const hostInput = document.getElementById('host');
+        const configToggle = document.getElementById('configToggle');
+        const configSection = document.getElementById('configSection');
+
+        // Toggle the visibility of the configuration section
+        configToggle.addEventListener('click', () => {
+            const isVisible = configSection.style.display === 'block';
+            configSection.style.display = isVisible ? 'none' : 'block';
+            configToggle.textContent = isVisible ? 'Configure Settings' : 'Hide Settings';
+        });
+
+        // Save the secret key to localStorage
+        saveButton.addEventListener('click', () => {
+            const key = secretKeyInput.value;
+            const host = hostInput.value;
+            if (key && host) {
+                localStorage.setItem('x-functions-key', key);
+                localStorage.setItem('host', host);
+                getSelectedDeviceId();
+                alert('Host and Key saved successfully!');
+            } else {
+                alert('Please enter a valid host and key.');
+            }
+        });
+
+        // Function to get the selected device ID
+        function getSelectedDeviceId() {
+            const radios = document.querySelectorAll('input[name="deviceId"]');
+            for (const radio of radios) {
+                if (radio.checked) {
+                    // Save to local storage for future use
+                    localStorage.setItem('deviceId', radio.value);
+                }
+            }
+        }
+
+        // Function to make the API request
+        function makeApiRequest() {
+            const deviceId = localStorage.getItem('deviceId');
+            const host = localStorage.getItem('host');
+            const secretKey = localStorage.getItem('x-functions-key');
+
+            if (!secretKey || !host) {
+                alert('Please provide a secret key first.');
+                return;
+            }
+
+            fetch(`https://${host}/api/heartbox?deviceId=${deviceId}`, {
+                headers: {
+                    'x-functions-key': secretKey
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.peer === 'on') {
+                    lightbulbImg.src = 'red_lightbulb.jpg'; // Red bulb image when peer is "on"
+                } else {
+                    lightbulbImg.src = 'unlit_bulb.jpg'; // Unlit bulb image when peer is "off"
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Automatically call the API when the radio button selection changes
+        document.querySelectorAll('input[name="deviceId"]').forEach(radio => {
+            radio.addEventListener('change', makeApiRequest);
+        });
+
+        // Call the API once on page load with the initial selection
+        window.onload = makeApiRequest;
+    </script>
+
+</body>
+</html>
