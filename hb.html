@@ -24,7 +24,7 @@
             font-size: 15px;
             font-weight: bold;
             color: gray;
-            text-decoration: underline;
+            text-decoration: none;
             float: right;
         }
 
@@ -85,7 +85,7 @@
         configToggle.addEventListener('click', () => {
             const isVisible = configSection.style.display === 'block';
             configSection.style.display = isVisible ? 'none' : 'block';
-            configToggle.textContent = isVisible ? 'Configure Settings' : 'Hide Settings';
+            configToggle.textContent = isVisible ? '⚙️' : 'Hide Settings';
         });
 
         // Save the secret key to localStorage
