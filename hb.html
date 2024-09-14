@@ -32,7 +32,7 @@
 
 
     <div id="output">
-        <img id="lightbulb" src="unlit_bulb.jpg" class="lightbulb" alt="Lightbulb" />
+        <img id="lightbulb" src="imgs/unlit_bulb.jpg" class="lightbulb" alt="Lightbulb" />
     </div>
 
     <div class="config-toggle" id="configToggle">Configure Settings</div>
@@ -118,9 +118,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data.peer === 'on') {
-                    lightbulbImg.src = 'red_lightbulb.jpg'; // Red bulb image when peer is "on"
+                    lightbulbImg.src = 'imgs/red_lightbulb.jpg'; // Red bulb image when peer is "on"
                 } else {
-                    lightbulbImg.src = 'unlit_bulb.jpg'; // Unlit bulb image when peer is "off"
+                    lightbulbImg.src = 'imgs/unlit_bulb.jpg'; // Unlit bulb image when peer is "off"
                 }
             })
             .catch(error => {
