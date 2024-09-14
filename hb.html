@@ -13,6 +13,10 @@
         .lightbulb {
             width: 500px;
             height: 500px;
+            /* align centered */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         .config-section {
             display: none;
@@ -21,12 +25,12 @@
         .config-toggle {
             margin-top: 2px;
             margin-right: 2px;
+            margin-bottom: 5px;
             cursor: pointer;
             font-size: 15px;
             font-weight: bold;
             color: gray;
-            text-decoration: none;
-            float: right;
+            text-decoration: none;  
         }
 
         /* Media query for mobile devices */
@@ -43,9 +47,6 @@
 </head>
 <body>
     <div class="config-toggle" id="configToggle">⚙️</div>
-    <div id="output">
-        <img id="lightbulb" src="imgs/unlit_bulb.jpg" class="lightbulb" alt="Lightbulb" />
-    </div>
     <div class="config-section" id="configSection">
         <div>
             <label>
@@ -65,6 +66,10 @@
             <br>
             <button id="saveButton">Save</button>
         </div>
+    </div>
+
+    <div id="output">
+        <img id="lightbulb" src="imgs/unlit_bulb.jpg" class="lightbulb" alt="Lightbulb" />
     </div>
 
     <script>
